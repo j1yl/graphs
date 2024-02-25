@@ -1,10 +1,16 @@
 # What are graphs?
 
-This is my 24 hour hackathon project.
+This is my 24 hour hackathon project for [FullyHacks 2024](https://fullyhacks.acmcsuf.com/).
 
 There are many things to improve, this is the MVP.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Todo
+- [ ] Add brute force algorithm
+- [ ] Add optional to select which heuristic function to use
+- [ ] Improve code modularity and overall cleaniness
+- [ ] Clean up useEffects and reduce first load JS
+- [ ] Improve overall accessibility
+- [ ] Add assets and theming
 
 ## Getting Started
 

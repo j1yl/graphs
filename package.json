@@ -1,6 +1,7 @@
 {
   "name": "fhsp2024",
-  "version": "0.1.0",
+  "description": "A constellation-inspired visualization of graph traversel algorithms.",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
