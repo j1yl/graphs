@@ -25,48 +25,79 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
   >([]);
   const [density, setDensity] = useState(0.5);
 
-  useEffect(() => {
-    const initVertices = (): Vertex[] => {
-      let verts = [];
-      const minDistance = 50; // Minimum distance between any two vertices
-      let attempts = 0;
-      const maxAttempts = amount * 3; // Avoid infinite loops
+  const initVertices = (): Vertex[] => {
+    let verts = [];
+    const minDistance = 50; // Minimum distance between any two vertices
+    let attempts = 0;
+    const maxAttempts = amount * 3; // Avoid infinite loops
 
-      while (verts.length < amount && attempts < maxAttempts) {
-        const x = Math.random() * width;
-        const y = Math.random() * height;
-        let isFarEnough = true;
+    while (verts.length < amount && attempts < maxAttempts) {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      let isFarEnough = true;
 
-        for (let vertex of verts) {
+      for (let vertex of verts) {
+        const distance = Math.sqrt(
+          Math.pow(vertex.x - x, 2) + Math.pow(vertex.y - y, 2),
+        );
+        if (distance < minDistance) {
+          isFarEnough = false;
+          break;
+        }
+      }
+
+      if (isFarEnough) {
+        verts.push(new Vertex(x, y));
+      }
+
+      attempts++;
+    }
+
+    if (verts.length < amount) {
+      console.warn(
+        `Only able to place ${verts.length} out of ${amount} vertices due to spacing constraints.`,
+      );
+    }
+
+    return verts;
+  };
+
+  const connectVertices = (
+    vertices: Vertex[],
+  ): { from: Vertex; to: Vertex; weight: number }[] => {
+    let conns: { from: Vertex; to: Vertex; weight: number }[] = [];
+    const maxConnectionsPerVertex = 4; // max connects per vertex
+    const distanceThreshold = Math.min(width, height) * density; // graph density (0.5 default)
+
+    vertices.forEach((vertex, i) => {
+      let connectionsMade = 0;
+      for (
+        let j = 0;
+        j < vertices.length && connectionsMade < maxConnectionsPerVertex;
+        j++
+      ) {
+        if (i !== j) {
           const distance = Math.sqrt(
-            Math.pow(vertex.x - x, 2) + Math.pow(vertex.y - y, 2),
+            Math.pow(vertex.x - vertices[j].x, 2) +
+              Math.pow(vertex.y - vertices[j].y, 2),
           );
-          if (distance < minDistance) {
-            isFarEnough = false;
-            break;
+          if (distance < distanceThreshold) {
+            conns.push({ from: vertex, to: vertices[j], weight: distance });
+            conns.push({ from: vertices[j], to: vertex, weight: distance });
+            connectionsMade++;
           }
         }
-
-        if (isFarEnough) {
-          verts.push(new Vertex(x, y));
-        }
-
-        attempts++;
       }
+    });
 
-      if (verts.length < amount) {
-        console.warn(
-          `Only able to place ${verts.length} out of ${amount} vertices due to spacing constraints.`,
-        );
-      }
+    return conns;
+  };
 
-      return verts;
-    };
-
+  useEffect(() => {
     const verts = initVertices();
     setVertices(verts);
     setEdges(connectVertices(verts));
-  }, [width, height, density]);
+  }, [width, height, density, amount]);
 
   useEffect(() => {
     if (startVertex && endVertex) {
@@ -110,37 +141,6 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
     }, delayBeforeShortestPath);
   };
 
-  const connectVertices = (
-    vertices: Vertex[],
-  ): { from: Vertex; to: Vertex; weight: number }[] => {
-    let conns: { from: Vertex; to: Vertex; weight: number }[] = [];
-    const maxConnectionsPerVertex = 4; // max connects per vertex
-    const distanceThreshold = Math.min(width, height) * density; // graph density (0.5 default)
-
-    vertices.forEach((vertex, i) => {
-      let connectionsMade = 0;
-      for (
-        let j = 0;
-        j < vertices.length && connectionsMade < maxConnectionsPerVertex;
-        j++
-      ) {
-        if (i !== j) {
-          const distance = Math.sqrt(
-            Math.pow(vertex.x - vertices[j].x, 2) +
-              Math.pow(vertex.y - vertices[j].y, 2),
-          );
-          if (distance < distanceThreshold) {
-            conns.push({ from: vertex, to: vertices[j], weight: distance });
-            conns.push({ from: vertices[j], to: vertex, weight: distance });
-            connectionsMade++;
-          }
-        }
-      }
-    });
-
-    return conns;
-  };
-
   const handleVertexClick = (vertex: Vertex) => {
     if (!startVertex) {
       setStartVertex(vertex);
@@ -161,14 +161,14 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
         duration: 0.5,
         delay: 0.2,
       }}
-      className="flex flex-col gap-4 md:gap-8"
+      className="flex flex-col items-center justify-center gap-4 md:gap-8"
     >
       <div className="flex items-center justify-center gap-2">
-        <div className="flex w-max flex-col items-center gap-4">
-          <h2 className="font-bold uppercase">
-            Bidirectional graph traversal (Dijkstra's algorithm)
+        <div className="flex flex-col items-center gap-4">
+          <h2 className="text-center font-bold uppercase">
+            Bidirectional graph traversal (Dijkstra&apos;s algorithm)
           </h2>
-          <p className="text-xs">
+          <p className="text-center text-xs text-neutral-400">
             Click two dots to find the shortest path and visualize algorithm
             behavior.
           </p>

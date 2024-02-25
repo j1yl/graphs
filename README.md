@@ -1,3 +1,9 @@
+# What are graphs?
+
+This is my 24 hour hackathon project.
+
+There are many things to improve, this is the MVP.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
