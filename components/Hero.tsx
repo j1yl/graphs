@@ -162,6 +162,7 @@ export default function Hero({ width, height, amount }: Props) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 1.5 }}
+        className="mt-4"
       >
         <KeyboardArrowDownIcon className="h-6 w-6 animate-bounce text-neutral-400" />
       </motion.div>

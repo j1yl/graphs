@@ -23,7 +23,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
   const [shortestPathEdges, setShortestPathEdges] = useState<Edge[]>([]);
 
   const [algorithm, setAlgorithm] = useState<Algorithm>("dijkstra");
-  const [amount, setAmount] = useState(48);
+  const [amount, setAmount] = useState(32);
   const [density, setDensity] = useState(0.5);
 
   const [isAnimating, setIsAnimating] = useState(false);
@@ -32,6 +32,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
 
   const initVertices = (): Vertex[] => {
     const minDistance = 50; // min dist for 2 pts in px
+    const margin = 10;
     const maxAttempts = amount * 3;
 
     let verts = [];
@@ -40,6 +41,16 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
     while (verts.length < amount && attempts < maxAttempts) {
       const x = Math.random() * width;
       const y = Math.random() * height;
+
+      if (
+        x < margin ||
+        x > width - margin ||
+        y < margin ||
+        y > height - margin
+      ) {
+        continue;
+      }
+
       let isFarEnough = true;
 
       for (let vertex of verts) {
@@ -72,7 +83,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
     vertices: Vertex[],
   ): { from: Vertex; to: Vertex; weight: number }[] => {
     let conns: { from: Vertex; to: Vertex; weight: number }[] = [];
-    const maxConnectionsPerVertex = 4; // max connects per vertex
+    const maxConnectionsPerVertex = 3; // max connects per vertex
     const distanceThreshold = Math.min(width, height) * density; // graph density (0.5 default)
 
     vertices.forEach((vertex, i) => {
@@ -274,23 +285,23 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
               </button>
               <button
                 disabled={isAnimating}
-                onClick={() => setAmount(48)}
+                onClick={() => setAmount(32)}
                 className={`px-2 py-1 transition-colors duration-200 ease-in-out hover:bg-green-300/30 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-neutral-400`}
                 style={{
-                  background: amount === 48 ? "rgba(134, 239, 172, 0.3)" : "",
+                  background: amount === 32 ? "rgba(134, 239, 172, 0.3)" : "",
                 }}
               >
-                48
+                32
               </button>
               <button
                 disabled={isAnimating}
-                onClick={() => setAmount(100)}
+                onClick={() => setAmount(64)}
                 className={`px-2 py-1 transition-colors duration-200 ease-in-out hover:bg-green-300/30 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-neutral-400`}
                 style={{
-                  background: amount === 100 ? "rgba(134, 239, 172, 0.3)" : "",
+                  background: amount === 64 ? "rgba(134, 239, 172, 0.3)" : "",
                 }}
               >
-                100
+                64
               </button>
             </div>
             <div
