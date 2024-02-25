@@ -1,7 +1,7 @@
 "use client";
 
 import Grid from "@/components/Grid";
-import NorthernLights from "@/components/NorthernLights";
+import Hero from "@/components/Hero";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
   const [width, setWidth] = useState(960);
 
   const handleWindowSizeChange = () => {
-    setWidth(window.innerWidth * 0.6);
+    setWidth(window.innerWidth * 0.75);
     setIsMobile(window.innerWidth < 700 ? true : false);
 
     if (isMobile) {
@@ -26,14 +26,18 @@ export default function Home() {
 
   return (
     <section>
-      <div className="relative flex min-h-screen items-center justify-center">
-        {/* <NorthernLights /> */}
+      <div className="rleative flex min-h-screen items-center justify-center">
+        <Hero
+          width={width}
+          height={(width * 9) / 16}
+          amount={isMobile ? 4 : 32}
+        />
       </div>
       <div className="relative flex min-h-screen items-center justify-center">
         <Grid
           width={width}
           height={(width * 9) / 16}
-          amount={isMobile ? 4 : 16}
+          amount={isMobile ? 4 : 32}
         />
       </div>
     </section>

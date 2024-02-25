@@ -23,6 +23,7 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
   const [shortestPathEdges, setShortestPathEdges] = useState<
     { from: Vertex; to: Vertex }[]
   >([]);
+  const [density, setDensity] = useState(0.5);
 
   useEffect(() => {
     const initVertices = (): Vertex[] => {
@@ -65,7 +66,7 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
     const verts = initVertices();
     setVertices(verts);
     setEdges(connectVertices(verts));
-  }, [width, height]);
+  }, [width, height, density]);
 
   useEffect(() => {
     if (startVertex && endVertex) {
@@ -92,7 +93,7 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
       }, index * 50); // Adjust timing as needed
     });
 
-    const delayBeforeShortestPath = visitedEdges.length * 50;
+    const delayBeforeShortestPath = visitedEdges.length * 100;
     setTimeout(() => {
       pathVertices.forEach((vertex, index) => {
         if (index < pathVertices.length - 1) {
@@ -114,7 +115,7 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
   ): { from: Vertex; to: Vertex; weight: number }[] => {
     let conns: { from: Vertex; to: Vertex; weight: number }[] = [];
     const maxConnectionsPerVertex = 4; // max connects per vertex
-    const distanceThreshold = Math.min(width, height) * 0.5; // graph density
+    const distanceThreshold = Math.min(width, height) * density; // graph density (0.5 default)
 
     vertices.forEach((vertex, i) => {
       let connectionsMade = 0;
@@ -153,87 +154,137 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
   };
 
   return (
-    <motion.svg
-      initial={{
-        opacity: 0,
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{
+        duration: 0.5,
+        delay: 0.2,
       }}
-      animate={{
-        opacity: 1,
-      }}
-      width={width}
-      height={height}
-      className="grid"
+      className="flex flex-col gap-4 md:gap-8"
     >
-      {edges.map((edge, i) => (
-        <svg key={i} className="">
-          <line
-            x1={edge.from.x}
-            y1={edge.from.y}
-            x2={edge.to.x}
-            y2={edge.to.y}
-            className="stroke-neutral-700"
-            strokeWidth={1}
-          />
-          <text
-            x={(edge.from.x + edge.to.x) / 2}
-            y={(edge.from.y + edge.to.y) / 2}
-            className="fill-neutral-700 text-xs"
-          >
-            {edge.weight.toFixed(2)}
-          </text>
-        </svg>
-      ))}
-
+      <div className="flex items-center justify-center gap-2">
+        <div className="flex w-max flex-col items-center gap-4">
+          <h2 className="font-bold uppercase">
+            Bidirectional graph traversal (Dijkstra's algorithm)
+          </h2>
+          <p className="text-xs">
+            Click two dots to find the shortest path and visualize algorithm
+            behavior.
+          </p>
+          <div className="flex items-center justify-center rounded-lg border border-blue-200 text-xs text-white shadow-[0_0_1px_#fff,inset_0_0_1px_#fff,0_0_2px_#4bf,0_0_8px_#4bf,0_0_8px_#4bf]">
+            <button
+              onClick={() => setDensity(0.3)}
+              className={`px-2 py-1 transition-colors duration-200 ease-in-out hover:bg-white/30`}
+              style={{
+                background: density === 0.3 ? "rgba(255, 255, 255, 0.3)" : "",
+              }}
+            >
+              Sparse
+            </button>
+            <button
+              onClick={() => setDensity(0.5)}
+              className={`px-2 py-1 transition-colors duration-200 ease-in-out hover:bg-white/30`}
+              style={{
+                background: density === 0.5 ? "rgba(255, 255, 255, 0.3)" : "",
+              }}
+            >
+              Normal
+            </button>
+            <button
+              onClick={() => setDensity(0.7)}
+              className={`px-2 py-1 transition-colors duration-200 ease-in-out hover:bg-white/30`}
+              style={{
+                background: density === 0.7 ? "rgba(255, 255, 255, 0.3)" : "",
+              }}
+            >
+              Dense
+            </button>
+          </div>
+        </div>
+      </div>
       <motion.svg
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, staggerChildren: 2 }}
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        width={width}
+        height={height}
+        // className="border border-red-500"
       >
-        {/* Render visited edges */}
-        {visitedEdges.map((edge, i) => (
-          <motion.line
-            key={`visited-${i}`}
-            x1={edge.from.x}
-            y1={edge.from.y}
-            x2={edge.to.x}
-            y2={edge.to.y}
-            className={"stroke-teal-700"}
-            strokeWidth={1}
-            filter={"url(#glow)"}
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 0.5 }}
-          />
+        {edges.map((edge, i) => (
+          <svg key={i} className="">
+            <line
+              x1={edge.from.x}
+              y1={edge.from.y}
+              x2={edge.to.x}
+              y2={edge.to.y}
+              className="stroke-neutral-700"
+              strokeWidth={1}
+            />
+            <text
+              x={(edge.from.x + edge.to.x) / 2}
+              y={(edge.from.y + edge.to.y) / 2}
+              className="fill-neutral-700 text-xs"
+            >
+              {edge.weight.toFixed(2)}
+            </text>
+          </svg>
         ))}
 
-        {/* Render shortest path edges */}
-        {shortestPathEdges.map((edge, i) => (
-          <motion.line
-            key={`shortest-${i}`}
-            x1={edge.from.x}
-            y1={edge.from.y}
-            x2={edge.to.x}
-            y2={edge.to.y}
-            className="stroke-teal-500"
-            strokeWidth={2}
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 2 }}
+        <motion.svg
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, staggerChildren: 2 }}
+        >
+          {/* Render visited edges */}
+          {visitedEdges.map((edge, i) => (
+            <motion.line
+              key={`visited-${i}`}
+              x1={edge.from.x}
+              y1={edge.from.y}
+              x2={edge.to.x}
+              y2={edge.to.y}
+              className={"stroke-sky-700"}
+              strokeWidth={1}
+              filter={"url(#glow)"}
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.5 }}
+            />
+          ))}
+
+          {/* Render shortest path edges */}
+          {shortestPathEdges.map((edge, i) => (
+            <motion.line
+              key={`shortest-${i}`}
+              x1={edge.from.x}
+              y1={edge.from.y}
+              x2={edge.to.x}
+              y2={edge.to.y}
+              className="stroke-sky-500"
+              strokeWidth={2}
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 2 }}
+            />
+          ))}
+        </motion.svg>
+
+        {vertices.map((vertex, i) => (
+          <circle
+            key={i}
+            cx={vertex.x}
+            cy={vertex.y}
+            r={startVertex === vertex ? 6 : endVertex === vertex ? 6 : 4}
+            onClick={() => handleVertexClick(vertex)}
+            className={`cursor-pointer fill-white ${startVertex === vertex ? "fill-white" : endVertex === vertex ? "fill-white" : "fill-neutral-400"} stroke-2`}
           />
         ))}
       </motion.svg>
-
-      {vertices.map((vertex, i) => (
-        <circle
-          key={i}
-          cx={vertex.x}
-          cy={vertex.y}
-          r={startVertex === vertex ? 6 : endVertex === vertex ? 6 : 4}
-          onClick={() => handleVertexClick(vertex)}
-          className={`cursor-pointer fill-white ${startVertex === vertex ? "fill-white" : endVertex === vertex ? "fill-white" : "fill-neutral-400"} stroke-2`}
-        />
-      ))}
-    </motion.svg>
+    </motion.div>
   );
 };
 
