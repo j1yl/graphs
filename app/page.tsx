@@ -14,7 +14,7 @@ export default function Home() {
   const handleWindowSizeChange = () => {
     const currentWidth = window.innerWidth;
     setIsMobile(currentWidth < 700);
-    setWidth(currentWidth * (currentWidth < 700 ? 0.9 : 0.75));
+    setWidth(currentWidth * (currentWidth < 700 ? 0.9 : 0.6));
   };
 
   useEffect(() => {
@@ -27,14 +27,14 @@ export default function Home() {
   }, []);
 
   return (
-    <section className="py-2 md:py-8">
+    <section>
       <motion.span
         style={{
           scaleX: scrollYProgress,
         }}
-        className="pointer-events-none fixed left-0 top-0 z-40 h-2 w-full origin-left bg-gradient-to-r from-sky-400 to-violet-400"
+        className="pointer-events-none fixed left-0 top-0 z-40 h-1 w-full origin-left bg-gradient-to-r from-sky-400 to-violet-400"
       />
-      <div className="rleative flex min-h-screen items-center justify-center">
+      <div className="relative flex min-h-screen items-center justify-center">
         <Hero
           width={width}
           height={(width * 9) / 16}

@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
+const poppins = Inter({
   subsets: ["latin"],
   weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "",
-  description: "",
+  title: "What are graphs?",
+  description: "A web page that explains what graphs are with a visualizer.",
 };
 
 export default function RootLayout({

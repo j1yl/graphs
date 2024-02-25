@@ -95,12 +95,21 @@ export default function Hero({ width, height, amount }: Props) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 2 }}
+        transition={{ duration: 0.5, delay: 1.5 }}
         className="flex flex-col items-center justify-center gap-2"
       >
         <h1 className="text-center font-bold uppercase">What are graphs?</h1>
         <p className="text-xs text-neutral-400">
-          A hackathon project by{" "}
+          A{" "}
+          <Link
+            href="https://fullyhacks.acmcsuf.com/"
+            target="_blank"
+            referrerPolicy="no-referrer"
+            className="underline hover:no-underline"
+          >
+            hackathon
+          </Link>{" "}
+          project by{" "}
           <Link
             href="https://www.joelee.info"
             target="_blank"
@@ -132,13 +141,13 @@ export default function Hero({ width, height, amount }: Props) {
             className={`${edge.weight < 250 ? "stroke-pink-400" : "stroke-violet-400"} opacity-35`}
             initial={{ pathLength: 0, opacity: 0.6 }}
             animate={{ pathLength: 1, opacity: 0.8 }}
-            transition={{ duration: 0.3, delay: i * 0.01 }} // Adjust delay as needed
+            transition={{ duration: 0.3, delay: i * 0.005 }} // Adjust delay as needed
           />
         ))}
         {vertices.map((vertex, i) => (
           <motion.circle
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.2, delay: i * 0.02 }}
             key={i}
             cx={vertex.x}

@@ -1,18 +1,19 @@
+import { Edge } from "./Edge";
 import { Vertex } from "./Vertex";
 
 export function dijkstra(
   vertices: Vertex[],
-  edges: { from: Vertex; to: Vertex; weight: number }[],
+  edges: Edge[],
   startVertex: Vertex,
   endVertex: Vertex,
 ): {
   path: Vertex[];
-  visited: { from: Vertex; to: Vertex }[];
+  visited: Edge[];
 } {
   const distances = new Map<Vertex, number>();
   const previous = new Map<Vertex, Vertex | null>();
   const queue: Vertex[] = [];
-  const visited: { from: Vertex; to: Vertex }[] = [];
+  const visited: Edge[] = [];
 
   vertices.forEach((vertex) => {
     distances.set(vertex, vertex === startVertex ? 0 : Infinity);
@@ -24,13 +25,13 @@ export function dijkstra(
     queue.sort(
       (a, b) => (distances.get(a) ?? Infinity) - (distances.get(b) ?? Infinity),
     );
+
     const currentVertex = queue.shift();
     if (!currentVertex) break;
 
-    visited.push({
-      from: previous.get(currentVertex) ?? currentVertex,
-      to: currentVertex,
-    });
+    visited.push(
+      new Edge(previous.get(currentVertex) ?? currentVertex, currentVertex, 0),
+    );
 
     if (currentVertex === endVertex) break;
 

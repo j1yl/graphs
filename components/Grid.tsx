@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Vertex } from "@/lib/Vertex";
 import { dijkstra } from "@/lib/Algo";
 import { motion } from "framer-motion";
+import { Edge } from "@/lib/Edge";
 
 type Props = {
   width: number;
@@ -11,25 +12,21 @@ type Props = {
 
 const Grid: React.FC<Props> = ({ width, height, amount }) => {
   const [vertices, setVertices] = useState<Vertex[]>([]);
-  const [edges, setEdges] = useState<
-    { from: Vertex; to: Vertex; weight: number }[]
-  >([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
+
   const [startVertex, setStartVertex] = useState<Vertex | null>(null);
   const [endVertex, setEndVertex] = useState<Vertex | null>(null);
-
-  const [visitedEdges, setVisitedEdges] = useState<
-    { from: Vertex; to: Vertex }[]
-  >([]);
-  const [shortestPathEdges, setShortestPathEdges] = useState<
-    { from: Vertex; to: Vertex }[]
-  >([]);
   const [density, setDensity] = useState(0.5);
 
+  const [visitedEdges, setVisitedEdges] = useState<Edge[]>([]);
+  const [shortestPathEdges, setShortestPathEdges] = useState<Edge[]>([]);
+
   const initVertices = (): Vertex[] => {
+    const minDistance = 50; // min dist for 2 pts in px
+    const maxAttempts = amount * 3;
+
     let verts = [];
-    const minDistance = 50; // Minimum distance between any two vertices
     let attempts = 0;
-    const maxAttempts = amount * 3; // Avoid infinite loops
 
     while (verts.length < amount && attempts < maxAttempts) {
       const x = Math.random() * width;
@@ -111,29 +108,30 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
     }
   }, [startVertex, endVertex, vertices, edges]);
 
-  const animatePath = (
-    pathVertices: Vertex[],
-    visited: { from: Vertex; to: Vertex }[],
-  ) => {
+  const animatePath = (pathVertices: Vertex[], visited: Edge[]) => {
     setVisitedEdges([]);
     setShortestPathEdges([]);
 
     visited.forEach((edge, index) => {
       setTimeout(() => {
         setVisitedEdges((currentEdges) => [...currentEdges, edge]);
-      }, index * 50); // Adjust timing as needed
+      }, index * 50);
     });
 
     const delayBeforeShortestPath = visitedEdges.length * 100;
     setTimeout(() => {
       pathVertices.forEach((vertex, index) => {
         if (index < pathVertices.length - 1) {
-          // Delay each edge of the shortest path based on its position in the path.
-          const delay = index * 500; // Adjust timing as needed.
+          const delay = index * 500;
           setTimeout(() => {
             setShortestPathEdges((currentEdges) => [
               ...currentEdges,
-              { from: vertex, to: pathVertices[index + 1] },
+              edges.find(
+                (edge) =>
+                  (edge.from === vertex &&
+                    edge.to === pathVertices[index + 1]) ||
+                  (edge.to === vertex && edge.from === pathVertices[index + 1]),
+              ) as Edge,
             ]);
           }, delay);
         }
@@ -212,7 +210,6 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
         }}
         width={width}
         height={height}
-        // className="border border-red-500"
       >
         {edges.map((edge, i) => (
           <svg key={i} className="">
@@ -247,7 +244,7 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
               y1={edge.from.y}
               x2={edge.to.x}
               y2={edge.to.y}
-              className={"stroke-sky-700"}
+              className={"stroke-sky-800"}
               strokeWidth={1}
               filter={"url(#glow)"}
               initial={{ pathLength: 0 }}
@@ -260,15 +257,15 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
           {shortestPathEdges.map((edge, i) => (
             <motion.line
               key={`shortest-${i}`}
-              x1={edge.from.x}
-              y1={edge.from.y}
-              x2={edge.to.x}
-              y2={edge.to.y}
-              className="stroke-sky-500"
+              x2={edge.from.x}
+              y2={edge.from.y}
+              x1={edge.to.x}
+              y1={edge.to.y}
+              className="stroke-sky-400"
               strokeWidth={2}
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
-              transition={{ duration: 2 }}
+              transition={{ duration: 1 }}
             />
           ))}
         </motion.svg>
@@ -278,7 +275,7 @@ const Grid: React.FC<Props> = ({ width, height, amount }) => {
             key={i}
             cx={vertex.x}
             cy={vertex.y}
-            r={startVertex === vertex ? 6 : endVertex === vertex ? 6 : 4}
+            r={startVertex === vertex ? 8 : endVertex === vertex ? 8 : 4}
             onClick={() => handleVertexClick(vertex)}
             className={`cursor-pointer fill-white ${startVertex === vertex ? "fill-white" : endVertex === vertex ? "fill-white" : "fill-neutral-400"} stroke-2`}
           />
