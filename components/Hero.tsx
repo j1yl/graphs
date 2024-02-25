@@ -100,7 +100,7 @@ export default function Hero({ width, height, amount }: Props) {
         className="flex flex-col items-center justify-center gap-2"
       >
         <h1 className="text-center font-bold uppercase">What are graphs?</h1>
-        <p className="text-xs text-neutral-400">
+        <p className="text-sm text-neutral-400">
           A{" "}
           <Link
             href="https://fullyhacks.acmcsuf.com/"

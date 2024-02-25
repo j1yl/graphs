@@ -208,7 +208,7 @@ export default function Home() {
         <Grid width={width} height={(width * 9) / 16} mobile={isMobile} />
       </div>
       <div className="relative flex items-center justify-center py-4 md:py-8">
-        <p className="text-xs">
+        <p className="text-sm">
           &copy; {new Date().getFullYear()} Joe L. Lee. All rights reserved.
         </p>
       </div>

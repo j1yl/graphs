@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Overpass } from "next/font/google";
 import "./globals.css";
 
-const poppins = Inter({
+const poppins = Overpass({
   subsets: ["latin"],
   weight: ["400", "700"],
 });
@@ -19,7 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} text-white`}>{children}</body>
+      <body
+        className={`${poppins.className} leading-none tracking-wide text-white`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

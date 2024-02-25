@@ -226,14 +226,17 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
       <div className="flex items-center justify-center gap-4">
         <div className="flex flex-col items-center gap-2">
           <h2 className="text-center font-bold uppercase">
-            Bidirectional graph traversal (Dijkstra&apos;s algorithm)
+            Graph traversal visualizer
           </h2>
-          <p className="text-center text-xs text-neutral-400">
+          <p className="text-center text-sm text-neutral-400">
             Click two dots to find the shortest path and visualize algorithm
             behavior.
           </p>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-            <div className="flex items-center justify-center rounded-lg border border-green-200 text-xs text-white shadow-[0_0_1px_#fff,inset_0_0_1px_#fff,0_0_2px_#4ade80,0_0_8px_#4ade80,0_0_8px_#4ade80]">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
+            <div
+              title="Select an algorithm"
+              className="flex items-center justify-center rounded-lg border border-green-200 text-sm text-white shadow-[0_0_1px_#fff,inset_0_0_1px_#fff,0_0_2px_#4ade80,0_0_8px_#4ade80,0_0_8px_#4ade80]"
+            >
               <button
                 onClick={() => setAlgorithm("dijkstra")}
                 className={`px-2 py-1 transition-colors duration-200 ease-in-out hover:bg-green-300/30 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-neutral-400`}
@@ -255,7 +258,10 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
                 A*
               </button>
             </div>
-            <div className="flex items-center justify-center rounded-lg border border-green-200 text-xs text-white shadow-[0_0_1px_#fff,inset_0_0_1px_#fff,0_0_2px_#4ade80,0_0_8px_#4ade80,0_0_8px_#4ade80]">
+            <div
+              title="Select the amount of vertices"
+              className="flex items-center justify-center rounded-lg border border-green-200 text-sm text-white shadow-[0_0_1px_#fff,inset_0_0_1px_#fff,0_0_2px_#4ade80,0_0_8px_#4ade80,0_0_8px_#4ade80]"
+            >
               <button
                 disabled={isAnimating}
                 onClick={() => setAmount(16)}
@@ -287,7 +293,10 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
                 100
               </button>
             </div>
-            <div className="flex items-center justify-center rounded-lg border border-green-200 text-xs text-white shadow-[0_0_1px_#fff,inset_0_0_1px_#fff,0_0_2px_#4ade80,0_0_8px_#4ade80,0_0_8px_#4ade80]">
+            <div
+              title="Select the graph density"
+              className="flex items-center justify-center rounded-lg border border-green-200 text-sm text-white shadow-[0_0_1px_#fff,inset_0_0_1px_#fff,0_0_2px_#4ade80,0_0_8px_#4ade80,0_0_8px_#4ade80]"
+            >
               <button
                 disabled={isAnimating}
                 onClick={() => setDensity(0.3)}
@@ -345,7 +354,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
             <text
               x={(edge.from.x + edge.to.x) / 2}
               y={(edge.from.y + edge.to.y) / 2}
-              className="fill-neutral-700 text-xs"
+              className="fill-neutral-700 text-sm"
             >
               {edge.weight.toFixed(2)}
             </text>
@@ -359,7 +368,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
             y1={edge.from.y}
             x2={edge.to.x}
             y2={edge.to.y}
-            className={"stroke-green-800"}
+            className={"stroke-green-700"}
             strokeWidth={mobile ? 2 : 1}
             filter={"url(#glow)"}
             initial={{ pathLength: 0 }}
@@ -375,7 +384,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
             y2={edge.from.y}
             x1={edge.to.x}
             y1={edge.to.y}
-            className="stroke-green-400"
+            className="stroke-green-300"
             strokeWidth={mobile ? 3 : 2}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
