@@ -12,20 +12,19 @@ export default function Home() {
   const [width, setWidth] = useState(960);
 
   const handleWindowSizeChange = () => {
-    setWidth(window.innerWidth * 0.75);
-    setIsMobile(window.innerWidth < 700 ? true : false);
-
-    if (isMobile) {
-      setWidth(window.innerWidth * 0.9);
-    }
+    const currentWidth = window.innerWidth;
+    setIsMobile(currentWidth < 700);
+    setWidth(currentWidth * (currentWidth < 700 ? 0.9 : 0.75));
   };
 
   useEffect(() => {
+    handleWindowSizeChange(); // Call on mount to set initial size
     window.addEventListener("resize", handleWindowSizeChange);
+
     return () => {
       window.removeEventListener("resize", handleWindowSizeChange);
     };
-  });
+  }, []);
 
   return (
     <section>
