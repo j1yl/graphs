@@ -340,6 +340,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
         }}
         width={width}
         height={height}
+        className={"select-none"}
       >
         {edges.map((edge, i) => (
           <svg key={i} className="">
@@ -368,9 +369,8 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
             y1={edge.from.y}
             x2={edge.to.x}
             y2={edge.to.y}
-            className={"stroke-green-700"}
+            className={"z-20 stroke-green-700"}
             strokeWidth={mobile ? 2 : 1}
-            filter={"url(#glow)"}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 0.5 }}
