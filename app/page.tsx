@@ -32,16 +32,15 @@ export default function Home() {
         style={{
           scaleX: scrollYProgress,
         }}
-        className="pointer-events-none fixed left-0 top-0 z-40 h-1 w-full origin-left bg-gradient-to-r from-sky-400 to-violet-400"
+        className="pointer-events-none fixed left-0 top-0 z-40 h-1 w-full origin-left bg-white"
       />
       <div className="relative flex min-h-screen items-center justify-center">
         <Hero
           width={width}
           height={(width * 9) / 16}
-          amount={isMobile ? 16 : 32}
+          amount={isMobile ? 16 : 48}
         />
       </div>
-
       <div className="relative mx-auto flex flex-col items-center justify-center gap-4 px-4 py-16 md:max-w-2xl md:py-32">
         <Accordion question="What is a graph in computer science and what are its components?">
           <div>
@@ -191,13 +190,8 @@ export default function Home() {
           </div>
         </Accordion>
       </div>
-
       <div className="relative flex min-h-screen items-center justify-center px-4">
-        <Grid
-          width={width}
-          height={(width * 9) / 16}
-          amount={isMobile ? 16 : 32}
-        />
+        <Grid width={width} height={(width * 9) / 16} mobile={isMobile} />
       </div>
       <div className="relative flex items-center justify-center py-4 md:py-8">
         <p className="text-xs uppercase">
