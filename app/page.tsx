@@ -2,9 +2,11 @@
 
 import Accordion from "@/components/Accordion";
 import Grid from "@/components/Grid";
+import CodeIcon from "@mui/icons-material/Code";
 import Hero from "@/components/Hero";
 import { motion, useScroll } from "framer-motion";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
@@ -35,6 +37,15 @@ export default function Home() {
         className="pointer-events-none fixed left-0 top-0 z-40 h-1 w-full origin-left bg-white"
       />
       <div className="relative flex min-h-screen items-center justify-center">
+        <Link
+          className="duratin-200 absolute right-0 top-0 mr-4 mt-4 flex aspect-square h-8 w-8 items-center justify-center rounded p-2 transition-colors ease-in-out hover:cursor-pointer hover:bg-white/20"
+          target="_blank"
+          referrerPolicy="no-referrer"
+          href="https://github.com/j1yl/graphs"
+        >
+          <span className="sr-only">Source code</span>
+          <CodeIcon className="h-4 w-4" />
+        </Link>
         <Hero
           width={width}
           height={(width * 9) / 16}
@@ -42,7 +53,10 @@ export default function Home() {
         />
       </div>
       <div className="relative mx-auto flex flex-col items-center justify-center gap-4 px-4 py-16 md:max-w-2xl md:py-32">
-        <Accordion question="What is a graph in computer science and what are its components?">
+        <Accordion
+          expanded
+          question="What is a graph in computer science and what are its components?"
+        >
           <div>
             In computer science, a graph is a data structure that represents a
             set of objects (vertices or nodes) connected by links (edges or
@@ -194,8 +208,8 @@ export default function Home() {
         <Grid width={width} height={(width * 9) / 16} mobile={isMobile} />
       </div>
       <div className="relative flex items-center justify-center py-4 md:py-8">
-        <p className="text-xs uppercase">
-          &copy; {new Date().getFullYear()} JOE L. LEE. ALL RIGHTS RESERVED.
+        <p className="text-xs">
+          &copy; {new Date().getFullYear()} Joe L. Lee. All rights reserved.
         </p>
       </div>
     </section>

@@ -5,6 +5,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 type Props = {
   question: string;
   children: React.ReactNode;
+  expanded?: boolean;
 };
 
 const variants = {
@@ -12,8 +13,8 @@ const variants = {
   closed: { opacity: 0, height: 0 },
 };
 
-export default function Accordion({ question, children }: Props) {
-  const [isOpen, setIsOpen] = React.useState(false);
+export default function Accordion({ question, children, expanded }: Props) {
+  const [isOpen, setIsOpen] = React.useState(expanded || false);
 
   return (
     <motion.div

@@ -104,80 +104,6 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
     timeoutRefs.current = [];
   };
 
-  useEffect(() => {
-    return () => {
-      timeoutRefs.current.forEach(clearTimeout);
-    };
-  }, []);
-
-  useEffect(() => {
-    const verts = initVertices();
-    setVertices(verts);
-    setEdges(connectVertices(verts));
-    setStartVertex(null);
-    setEndVertex(null);
-    setVisitedEdges([]);
-    setShortestPathEdges([]);
-  }, [width, height, density, amount]);
-
-  useEffect(() => {
-    if (startVertex && endVertex) {
-      let result: {
-        path: Vertex[];
-        visited: Edge[];
-      } = { path: [], visited: [] };
-
-      switch (algorithm) {
-        case "dijkstra": {
-          result = dijkstra(vertices, edges, startVertex, endVertex);
-          console.log(result);
-          break;
-        }
-        case "astar": {
-          result = astar(vertices, edges, startVertex, endVertex, heuristic);
-          console.log(result);
-          break;
-        }
-        default: {
-          result = { path: [], visited: [] };
-        }
-      }
-
-      animatePath(result.path, result.visited);
-    }
-  }, [startVertex, endVertex, vertices, edges, algorithm]);
-
-  // const animatePath = (pathVertices: Vertex[], visited: Edge[]) => {
-  //   setVisitedEdges([]);
-  //   setShortestPathEdges([]);
-
-  //   visited.forEach((edge, index) => {
-  //     setTimeout(() => {
-  //       setVisitedEdges((currentEdges) => [...currentEdges, edge]);
-  //     }, index * 50);
-  //   });
-
-  //   const delayBeforeShortestPath = visitedEdges.length * 100;
-  //   setTimeout(() => {
-  //     pathVertices.forEach((vertex, index) => {
-  //       if (index < pathVertices.length - 1) {
-  //         const delay = index * 500;
-  //         setTimeout(() => {
-  //           setShortestPathEdges((currentEdges) => [
-  //             ...currentEdges,
-  //             edges.find(
-  //               (edge) =>
-  //                 (edge.from === vertex &&
-  //                   edge.to === pathVertices[index + 1]) ||
-  //                 (edge.to === vertex && edge.from === pathVertices[index + 1]),
-  //             ) as Edge,
-  //           ]);
-  //         }, delay);
-  //       }
-  //     });
-  //   }, delayBeforeShortestPath);
-  // };
-
   const animatePath = (pathVertices: Vertex[], visited: Edge[]) => {
     setIsAnimating(true);
     clearAnimationTimeouts();
@@ -224,15 +150,68 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
 
   const handleVertexClick = (vertex: Vertex) => {
     if (!startVertex) {
-      clearAnimationTimeouts(); // Clear existing animations
+      clearAnimationTimeouts();
       setStartVertex(vertex);
       setEndVertex(null);
       setVisitedEdges([]);
       setShortestPathEdges([]);
     } else if (!endVertex && vertex !== startVertex) {
       setEndVertex(vertex);
+    } else if (startVertex && endVertex) {
+      setStartVertex(vertex);
+      setEndVertex(null);
+      setVisitedEdges([]);
+      setShortestPathEdges([]);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      timeoutRefs.current.forEach(clearTimeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    const verts = initVertices();
+    setVertices(verts);
+    setEdges(connectVertices(verts));
+    setStartVertex(null);
+    setEndVertex(null);
+    setVisitedEdges([]);
+    setShortestPathEdges([]);
+  }, [width, height, density, amount]);
+
+  useEffect(() => {
+    clearAnimationTimeouts();
+    setVisitedEdges([]);
+    setShortestPathEdges([]);
+    setIsAnimating(false);
+  }, [algorithm, amount, density]);
+
+  useEffect(() => {
+    if (startVertex && endVertex) {
+      let result: {
+        path: Vertex[];
+        visited: Edge[];
+      } = { path: [], visited: [] };
+
+      switch (algorithm) {
+        case "dijkstra": {
+          result = dijkstra(vertices, edges, startVertex, endVertex);
+          break;
+        }
+        case "astar": {
+          result = astar(vertices, edges, startVertex, endVertex, heuristic);
+          break;
+        }
+        default: {
+          result = { path: [], visited: [] };
+        }
+      }
+
+      animatePath(result.path, result.visited);
+    }
+  }, [startVertex, endVertex, vertices, edges, algorithm]);
 
   return (
     <motion.div
@@ -242,10 +221,10 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
         duration: 0.5,
         delay: 0.2,
       }}
-      className="flex flex-col items-center justify-center gap-4 md:gap-8"
+      className="flex flex-col items-center justify-center gap-8 md:gap-16"
     >
-      <div className="flex items-center justify-center gap-2">
-        <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center justify-center gap-4">
+        <div className="flex flex-col items-center gap-2">
           <h2 className="text-center font-bold uppercase">
             Bidirectional graph traversal (Dijkstra&apos;s algorithm)
           </h2>
@@ -253,7 +232,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
             Click two dots to find the shortest path and visualize algorithm
             behavior.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
             <div className="flex items-center justify-center rounded-lg border border-green-200 text-xs text-white shadow-[0_0_1px_#fff,inset_0_0_1px_#fff,0_0_2px_#4ade80,0_0_8px_#4ade80,0_0_8px_#4ade80]">
               <button
                 onClick={() => setAlgorithm("dijkstra")}
@@ -381,7 +360,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
             x2={edge.to.x}
             y2={edge.to.y}
             className={"stroke-green-800"}
-            strokeWidth={1}
+            strokeWidth={mobile ? 2 : 1}
             filter={"url(#glow)"}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
@@ -397,7 +376,7 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
             x1={edge.to.x}
             y1={edge.to.y}
             className="stroke-green-400"
-            strokeWidth={2}
+            strokeWidth={mobile ? 3 : 2}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 1 }}
@@ -410,8 +389,10 @@ const Grid: React.FC<Props> = ({ width, height, mobile }) => {
             cx={vertex.x}
             cy={vertex.y}
             r={startVertex === vertex ? 8 : endVertex === vertex ? 8 : 4}
-            onClick={() => handleVertexClick(vertex)}
-            className={`cursor-pointer fill-white ${startVertex === vertex ? "fill-white" : endVertex === vertex ? "fill-white" : "fill-neutral-400"} stroke-2`}
+            onClick={() => {
+              if (!isAnimating) handleVertexClick(vertex);
+            }}
+            className={`${isAnimating ? "cursor-not-allowed" : "cursor-pointer"} fill-white ${startVertex === vertex ? "fill-white" : endVertex === vertex ? "fill-white" : "fill-neutral-400"} stroke-2`}
           />
         ))}
       </motion.svg>

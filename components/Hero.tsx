@@ -2,6 +2,7 @@ import { Vertex } from "@/lib/Vertex";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 type Props = {
   width: number;
@@ -157,6 +158,13 @@ export default function Hero({ width, height, amount }: Props) {
           />
         ))}
       </svg>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 1.5 }}
+      >
+        <KeyboardArrowDownIcon className="h-6 w-6 animate-bounce text-neutral-400" />
+      </motion.div>
     </div>
   );
 }
