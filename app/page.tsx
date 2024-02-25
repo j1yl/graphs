@@ -27,7 +27,7 @@ export default function Home() {
   }, []);
 
   return (
-    <section>
+    <section className="py-2 md:py-8">
       <motion.span
         style={{
           scaleX: scrollYProgress,
@@ -198,6 +198,11 @@ export default function Home() {
           height={(width * 9) / 16}
           amount={isMobile ? 16 : 32}
         />
+      </div>
+      <div className="relative flex items-center justify-center py-4 md:py-8">
+        <p className="text-xs uppercase">
+          &copy; {new Date().getFullYear()} JOE L. LEE. ALL RIGHTS RESERVED.
+        </p>
       </div>
     </section>
   );
