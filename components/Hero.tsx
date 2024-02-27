@@ -101,16 +101,16 @@ export default function Hero({ width, height, amount }: Props) {
       >
         <h1 className="text-center font-bold uppercase">What are graphs?</h1>
         <p className="text-sm text-neutral-400">
-          A{" "}
+          A graph visualizer that won Best UI/UX at{" "}
           <Link
             href="https://fullyhacks.acmcsuf.com/"
             target="_blank"
             referrerPolicy="no-referrer"
             className="underline hover:no-underline"
           >
-            hackathon
+            FullyHacks
           </Link>{" "}
-          project by{" "}
+          by{" "}
           <Link
             href="https://www.joelee.info"
             target="_blank"

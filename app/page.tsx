@@ -3,6 +3,7 @@
 import Accordion from "@/components/Accordion";
 import Grid from "@/components/Grid";
 import CodeIcon from "@mui/icons-material/Code";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Hero from "@/components/Hero";
 import { motion, useScroll } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -37,15 +38,28 @@ export default function Home() {
         className="pointer-events-none fixed left-0 top-0 z-40 h-1 w-full origin-left bg-white"
       />
       <div className="relative flex min-h-screen items-center justify-center">
-        <Link
-          className="duratin-200 absolute right-0 top-0 mr-4 mt-4 flex aspect-square h-8 w-8 items-center justify-center rounded p-2 transition-colors ease-in-out hover:cursor-pointer hover:bg-white/20"
-          target="_blank"
-          referrerPolicy="no-referrer"
-          href="https://github.com/j1yl/graphs"
-        >
-          <span className="sr-only">Source code</span>
-          <CodeIcon className="h-4 w-4" />
-        </Link>
+        <div className="absolute right-0 top-0 mr-4 mt-4 flex justify-center gap-2">
+          <Link
+            className="aspect-square h-8 w-8 rounded p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-white/20"
+            target="_blank"
+            title="View 24h hackathon branch"
+            referrerPolicy="no-referrer"
+            href="https://github.com/j1yl/graphs/tree/hackathon-archive"
+          >
+            <span className="sr-only">View hackathon branch</span>
+            <AccessTimeIcon className="h-4 w-4" />
+          </Link>
+          <Link
+            className="aspect-square h-8 w-8 rounded p-2 transition-colors duration-200 ease-in-out hover:cursor-pointer hover:bg-white/20"
+            target="_blank"
+            title="View source code"
+            referrerPolicy="no-referrer"
+            href="https://github.com/j1yl/graphs"
+          >
+            <span className="sr-only">Source code</span>
+            <CodeIcon className="h-4 w-4" />
+          </Link>
+        </div>
         <Hero
           width={width}
           height={(width * 9) / 16}
