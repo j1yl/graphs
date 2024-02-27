@@ -1,12 +1,12 @@
 # What are graphs?
 
-This is my 24 hour hackathon project for [FullyHacks 2024](https://fullyhacks.acmcsuf.com/).
+Initially developed for [FullyHacks 2024](https://fullyhacks.acmcsuf.com/), a 24 hour hackathon. Winner of the `Best UI/UX` category, read more [here](https://www.joelee.info). 
 
-There are many things to improve, this is the MVP.
+I've decided to continue working on the project after the hackathon, but I will archive the progress at the time of submission in the `hackathon-archive` branch of this repository.
 
 ## Todo
 - [ ] Add brute force algorithm
-- [ ] Add optional to select which heuristic function to use
+- [ ] Add select to pick which heuristic function to use
 - [ ] Improve code modularity and overall cleaniness
 - [ ] Clean up useEffects and reduce first load JS
 - [ ] Improve overall accessibility
